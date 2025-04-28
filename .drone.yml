@@ -27,7 +27,7 @@ steps:
     commands:
       - abuild-keygen -nai
       - echo "https://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories
-      - apk update
+      - abuild-apk update
       - |
         for pkg in packages/*; do (
           cd $pkg; abuild -r
@@ -69,7 +69,7 @@ steps:
     commands:
       - abuild-keygen -nai
       - echo "https://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories
-      - apk update
+      - abuild-apk update
       - |
         for pkg in packages/*; do (
           cd $pkg; abuild -r
