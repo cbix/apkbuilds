@@ -10,28 +10,20 @@ platform:
 environment:
   SOURCE_DATE_EPOCH: ${DRONE_BUILD_CREATED}
   MAKEFLAGS: "-j4"
+  SRCDEST: /tmp/build
 
 steps:
-  - name: Remove unmodified packages
-    image: alpine/git
-    commands:
-      - |
-        for pkg in packages/*; do
-          if git diff --quiet ${DRONE_COMMIT_BEFORE}..${DRONE_COMMIT_AFTER} $pkg && [ -n "${CI}" ]; then
-            rm -r $pkg
-          fi
-        done
-      - ls -1 packages
   - name: Build packages
     image: alpinelinux/build-base
     commands:
-      - env | sort
       - abuild-keygen -nai
       - echo "https://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories
       - abuild-apk update
       - |
         for pkg in packages/*; do (
-          cd $pkg; abuild -r
+          if ! git diff --quiet ${DRONE_COMMIT_BEFORE}..${DRONE_COMMIT_AFTER} $pkg; then
+            cd $pkg; abuild -crs ~/src
+          fi
         ); done
 
 trigger:
@@ -55,16 +47,6 @@ environment:
   MAKEFLAGS: "-j4"
 
 steps:
-  - name: Remove unmodified packages
-    image: alpine/git
-    commands:
-      - |
-        for pkg in packages/*; do
-          if git diff --quiet ${DRONE_COMMIT_BEFORE}..${DRONE_COMMIT_AFTER} $pkg && [ -n "${CI}" ]; then
-            rm -r $pkg
-          fi
-        done
-      - ls -1 packages
   - name: Build packages
     image: alpinelinux/build-base
     commands:
@@ -73,7 +55,9 @@ steps:
       - abuild-apk update
       - |
         for pkg in packages/*; do (
-          cd $pkg; abuild -r
+          if ! git diff --quiet ${DRONE_COMMIT_BEFORE}..${DRONE_COMMIT_AFTER} $pkg; then
+            cd $pkg; abuild -crs ~/src
+          fi
         ); done
 
 trigger:
