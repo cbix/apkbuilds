@@ -11,7 +11,7 @@ environment:
   SOURCE_DATE_EPOCH: ${DRONE_BUILD_CREATED}
   MAKEFLAGS: "-j4"
 
-steps: &build_steps
+steps:
   - name: Remove unmodified packages
     image: alpine/git
     commands:
@@ -33,7 +33,7 @@ steps: &build_steps
           cd $pkg; abuild -r
         ); done
 
-trigger: &build_trigger
+trigger:
   event:
     - push
     - pull_request
@@ -49,6 +49,35 @@ platform:
   os: linux
   arch: arm64
 
-steps: *build_steps
+environment:
+  SOURCE_DATE_EPOCH: ${DRONE_BUILD_CREATED}
+  MAKEFLAGS: "-j4"
 
-trigger: *build_trigger
+steps:
+  - name: Remove unmodified packages
+    image: alpine/git
+    commands:
+      - |
+        for pkg in packages/*; do
+          if git diff --quiet ${DRONE_COMMIT_BEFORE}..${DRONE_COMMIT_AFTER} $pkg && [ -n "${CI}" ]; then
+            rm -r $pkg
+          fi
+        done
+      - ls -1 packages
+  - name: Build packages
+    image: alpinelinux/build-base
+    commands:
+      - abuild-keygen -nai
+      - echo "https://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories
+      - apk update
+      - |
+        for pkg in packages/*; do (
+          cd $pkg; abuild -r
+        ); done
+
+trigger:
+  event:
+    - push
+    - pull_request
+  branch:
+    - master
