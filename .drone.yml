@@ -7,27 +7,23 @@ platform:
   os: linux
   arch: amd64
 
+environment:
+  SOURCE_DATE_EPOCH: ${DRONE_BUILD_CREATED}
+  MAKEFLAGS: "-j4"
+
 steps:
-  - name: Remove unmodified packages
-    image: alpine/git
-    commands:
-      - |
-        for pkg in packages/*; do
-          if git diff --quiet master $pkg && [ -n "$CI" ]; then
-            rm -r $pkg
-          fi
-        done
-      - echo "Building:"
-      - ls -1 packages
   - name: Build packages
     image: alpinelinux/build-base
     commands:
+      - abuild-keygen -nai
+      - echo "https://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories
+      - abuild-apk update
+      - mkdir ~/build; cd packages
       - |
-        for pkg in packages/*; do
-          pushd $pkg
-            abuild -r
-          popd
-        done
+        for pkg in *; do (
+          cp -r $pkg ~/build/; cd ~/build/$pkg
+          abuild -r
+        ); done
 
 trigger:
   event:
@@ -45,27 +41,23 @@ platform:
   os: linux
   arch: arm64
 
+environment:
+  SOURCE_DATE_EPOCH: ${DRONE_BUILD_CREATED}
+  MAKEFLAGS: "-j4"
+
 steps:
-  - name: Remove unmodified packages
-    image: alpine/git
-    commands:
-      - |
-        for pkg in packages/*; do
-          if git diff --quiet master $pkg && [ -n "$CI" ]; then
-            rm -r $pkg
-          fi
-        done
-      - echo "Building:"
-      - ls -1 packages
   - name: Build packages
     image: alpinelinux/build-base
     commands:
+      - abuild-keygen -nai
+      - echo "https://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories
+      - abuild-apk update
+      - mkdir ~/build; cd packages
       - |
-        for pkg in packages/*; do
-          pushd $pkg
-            abuild -r
-          popd
-        done
+        for pkg in *; do (
+          cp -r $pkg ~/build/; cd ~/build/$pkg
+          abuild -r
+        ); done
 
 trigger:
   event:
