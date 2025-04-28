@@ -22,7 +22,7 @@ steps:
       - mkdir ~/build; cd packages
       - |
         for pkg in *; do (
-          if ! git diff --quiet ${DRONE_COMMIT_BEFORE}..${DRONE_COMMIT_AFTER} $pkg; then
+          if ! git diff --quiet ${DRONE_COMMIT_BEFORE}..${DRONE_COMMIT_AFTER} ./$pkg; then
             cp -r $pkg ~/build/; cd ~/build/$pkg
             abuild -r
           fi
@@ -58,7 +58,7 @@ steps:
       - mkdir ~/build; cd packages
       - |
         for pkg in *; do (
-          if ! git diff --quiet ${DRONE_COMMIT_BEFORE}..${DRONE_COMMIT_AFTER} $pkg; then
+          if ! git diff --quiet ${DRONE_COMMIT_BEFORE}..${DRONE_COMMIT_AFTER} ./$pkg; then
             cp -r $pkg ~/build/; cd ~/build/$pkg
             abuild -r
           fi
