@@ -22,6 +22,7 @@ steps:
   - name: Build packages
     image: alpinelinux/build-base
     commands:
+      - abuild-keygen -nai
       - |
         for pkg in packages/*; do (
           cd $pkg; abuild -r
@@ -58,6 +59,7 @@ steps:
   - name: Build packages
     image: alpinelinux/build-base
     commands:
+      - abuild-keygen -nai
       - |
         for pkg in packages/*; do (
           cd $pkg; abuild -r
