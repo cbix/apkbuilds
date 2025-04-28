@@ -13,7 +13,7 @@ steps:
     commands:
       - |
         for pkg in packages/*; do
-          if git diff --quiet master $pkg && [ -n "$CI" ]; then
+          if git diff --quiet ${DRONE_COMMIT_BEFORE}..${DRONE_COMMIT_AFTER} $pkg && [ -n "${CI}" ]; then
             rm -r $pkg
           fi
         done
@@ -49,7 +49,7 @@ steps:
     commands:
       - |
         for pkg in packages/*; do
-          if git diff --quiet master $pkg && [ -n "$CI" ]; then
+          if git diff --quiet ${DRONE_COMMIT_BEFORE}..${DRONE_COMMIT_AFTER} $pkg && [ -n "${CI}" ]; then
             rm -r $pkg
           fi
         done
