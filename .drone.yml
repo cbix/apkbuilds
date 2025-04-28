@@ -10,7 +10,6 @@ platform:
 environment:
   SOURCE_DATE_EPOCH: ${DRONE_BUILD_CREATED}
   MAKEFLAGS: "-j4"
-  SRCDEST: /tmp/build
 
 steps:
   - name: Build packages
@@ -22,10 +21,8 @@ steps:
       - mkdir ~/build; cd packages
       - |
         for pkg in *; do (
-          if ! git diff --quiet ${DRONE_COMMIT_BEFORE}..${DRONE_COMMIT_AFTER} ./$pkg; then
-            cp -r $pkg ~/build/; cd ~/build/$pkg
-            abuild -r
-          fi
+          cp -r $pkg ~/build/; cd ~/build/$pkg
+          abuild -r
         ); done
 
 trigger:
@@ -58,10 +55,8 @@ steps:
       - mkdir ~/build; cd packages
       - |
         for pkg in *; do (
-          if ! git diff --quiet ${DRONE_COMMIT_BEFORE}..${DRONE_COMMIT_AFTER} ./$pkg; then
-            cp -r $pkg ~/build/; cd ~/build/$pkg
-            abuild -r
-          fi
+          cp -r $pkg ~/build/; cd ~/build/$pkg
+          abuild -r
         ); done
 
 trigger:
