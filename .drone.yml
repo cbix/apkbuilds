@@ -1,0 +1,75 @@
+---
+kind: pipeline
+type: docker
+name: amd64
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+  - name: Remove unmodified packages
+    image: alpine/git
+    commands:
+      - |
+        for pkg in packages/*; do
+          if git diff --quiet master $pkg && [ -n "$CI" ]; then
+            rm -r $pkg
+          fi
+        done
+      - echo "Building:"
+      - ls -1 packages
+  - name: Build packages
+    image: alpinelinux/build-base
+    commands:
+      - |
+        for pkg in packages/*; do
+          pushd $pkg
+            abuild -r
+          popd
+        done
+
+trigger:
+  event:
+    - push
+    - pull_request
+  branch:
+    - master
+
+---
+kind: pipeline
+type: docker
+name: arm64
+
+platform:
+  os: linux
+  arch: arm64
+
+steps:
+  - name: Remove unmodified packages
+    image: alpine/git
+    commands:
+      - |
+        for pkg in packages/*; do
+          if git diff --quiet master $pkg && [ -n "$CI" ]; then
+            rm -r $pkg
+          fi
+        done
+      - echo "Building:"
+      - ls -1 packages
+  - name: Build packages
+    image: alpinelinux/build-base
+    commands:
+      - |
+        for pkg in packages/*; do
+          pushd $pkg
+            abuild -r
+          popd
+        done
+
+trigger:
+  event:
+    - push
+    - pull_request
+  branch:
+    - master
