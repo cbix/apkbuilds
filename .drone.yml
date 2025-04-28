@@ -7,6 +7,10 @@ platform:
   os: linux
   arch: amd64
 
+environment:
+  SOURCE_DATE_EPOCH: ${DRONE_BUILD_CREATED}
+  MAKEFLAGS: "-j4"
+
 steps:
   - name: Remove unmodified packages
     image: alpine/git
@@ -17,12 +21,12 @@ steps:
             rm -r $pkg
           fi
         done
-      - echo "Building:"
       - ls -1 packages
   - name: Build packages
     image: alpinelinux/build-base
     commands:
       - abuild-keygen -nai
+      - echo "https://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories
       - |
         for pkg in packages/*; do (
           cd $pkg; abuild -r
@@ -60,6 +64,7 @@ steps:
     image: alpinelinux/build-base
     commands:
       - abuild-keygen -nai
+      - echo "https://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories
       - |
         for pkg in packages/*; do (
           cd $pkg; abuild -r
