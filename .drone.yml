@@ -23,11 +23,9 @@ steps:
     image: alpinelinux/build-base
     commands:
       - |
-        for pkg in packages/*; do
-          pushd $pkg
-            abuild -r
-          popd
-        done
+        for pkg in packages/*; do (
+          cd $pkg; abuild -r
+        ); done
 
 trigger:
   event:
@@ -61,11 +59,9 @@ steps:
     image: alpinelinux/build-base
     commands:
       - |
-        for pkg in packages/*; do
-          pushd $pkg
-            abuild -r
-          popd
-        done
+        for pkg in packages/*; do (
+          cd $pkg; abuild -r
+        ); done
 
 trigger:
   event:
