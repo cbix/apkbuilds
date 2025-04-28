@@ -7,7 +7,6 @@ pkgdesc="Ninjam online jamming server"
 url="https://cockos.com/ninjam/"
 arch="all"
 license="GPL-2.0-or-later"
-subpackages="$pkgname-dev $pkgname-doc"
 # git blame -l ninjam/server/ninjamsrv.cpp | grep "#define VERSION" | cut -d ' ' -f 1
 _commit=44c21b98042afc440af456e110f857b7947ff859
 source="$pkgname-$pkgver.tar.gz::https://github.com/justinfrankel/ninjam/archive/$_commit.tar.gz"
