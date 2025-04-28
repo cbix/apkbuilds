@@ -1,0 +1,30 @@
+# Maintainer: Florian Hülsmann <fh@cbix.de>
+_name=ninjam
+pkgname=ninjam-server
+pkgver=0.080
+pkgrel=0
+pkgdesc="Ninjam online jamming server"
+url="https://cockos.com/ninjam/"
+arch="all"
+license="GPL-2.0-or-later"
+# git blame -l ninjam/server/ninjamsrv.cpp | grep "#define VERSION" | cut -d ' ' -f 1
+_commit=44c21b98042afc440af456e110f857b7947ff859
+source="$pkgname-$pkgver.tar.gz::https://github.com/justinfrankel/ninjam/archive/$_commit.tar.gz"
+builddir="$srcdir"/$_name-$_commit
+options="!check" # doesn't have tests
+
+build() {
+	cd $_name/server
+	# Makefile is not including outside flags
+	make CXXFLAGS="$CXXFLAGS $LDFLAGS"
+}
+
+package() {
+	cd $_name/server
+	install -vDm755 ninjamsrv -t "$pkgdir"/usr/bin
+	install -vDm644 example.cfg "$pkgdir"/etc/$_name.cfg
+}
+
+sha512sums="
+2354dd7e57420ff4328cbfba8ee4c4adc4ca13c8fcc88cf7d18c69285b3a34b585edb627e9ce4c455944b5a63f16711f2285be1ab572685e6411ba2629a2be9a  ninjam-server-0.080.tar.gz
+"
