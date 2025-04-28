@@ -19,10 +19,12 @@ steps:
       - abuild-keygen -nai
       - echo "https://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories
       - abuild-apk update
+      - mkdir ~/build; cd packages
       - |
-        for pkg in packages/*; do (
+        for pkg in *; do (
           if ! git diff --quiet ${DRONE_COMMIT_BEFORE}..${DRONE_COMMIT_AFTER} $pkg; then
-            cd $pkg; abuild -crs ~/src
+            cp -r $pkg ~/build/; cd ~/build/$pkg
+            abuild -crs ~/src
           fi
         ); done
 
@@ -53,10 +55,12 @@ steps:
       - abuild-keygen -nai
       - echo "https://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories
       - abuild-apk update
+      - mkdir ~/build; cd packages
       - |
-        for pkg in packages/*; do (
+        for pkg in *; do (
           if ! git diff --quiet ${DRONE_COMMIT_BEFORE}..${DRONE_COMMIT_AFTER} $pkg; then
-            cd $pkg; abuild -crs ~/src
+            cp -r $pkg ~/build/; cd ~/build/$pkg
+            abuild -crs ~/src
           fi
         ); done
 
