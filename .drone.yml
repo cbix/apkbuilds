@@ -25,7 +25,7 @@ steps:
   - name: Build packages
     image: alpinelinux/build-base
     commands:
-      - env
+      - env | sort
       - abuild-keygen -nai
       - echo "https://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories
       - abuild-apk update
