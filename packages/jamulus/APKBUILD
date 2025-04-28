@@ -29,7 +29,7 @@ package() {
 }
 
 headless() {
-	pkgdesc+=" (headless server)"
+	pkgdesc="$pkgdesc (headless server)"
 	install -vDm755 jamulus-headless "$subpkgdir"/usr/bin/jamulus
 }
 
