@@ -18,7 +18,7 @@ steps:
       - abuild-keygen -nai
       - echo "https://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories
       - abuild-apk update
-      - mkdir ~/build; cd packages
+      - mkdir ~/build; cd cbix-alpine
       - |
         for pkg in *; do (
           cp -r $pkg ~/build/; cd ~/build/$pkg
@@ -52,7 +52,7 @@ steps:
       - abuild-keygen -nai
       - echo "https://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories
       - abuild-apk update
-      - mkdir ~/build; cd packages
+      - mkdir ~/build; cd cbix-alpine
       - |
         for pkg in *; do (
           cp -r $pkg ~/build/; cd ~/build/$pkg

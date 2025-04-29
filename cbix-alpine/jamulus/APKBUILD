@@ -1,4 +1,5 @@
-# Maintainer: Florian HÜlsmann <fh@cbix.de>
+# Contributor: Florian Hülsmann <fh@cbix.de>
+# Maintainer: Florian Hülsmann <fh@cbix.de>
 pkgname=jamulus
 pkgver=3.11.0
 pkgrel=0
@@ -8,15 +9,15 @@ arch="all"
 license="GPL-2.0-only"
 makedepends="jack-dev qt6-qtbase-dev qt6-qtmultimedia-dev qt6-qttools"
 subpackages="$pkgname-doc $pkgname-headless"
-source="$pkgname-$pkgver.tar.gz::https://github.com/jamulussoftware/$pkgname/archive/r${pkgver//./_}.tar.gz"
+source="$pkgname-$pkgver.tar.gz::https://github.com/jamulussoftware/jamulus/archive/r${pkgver//./_}.tar.gz"
 builddir="$srcdir"/$pkgname-r${pkgver//./_}
 options="!check" # doesn't have tests
 
 build() {
-  qmake6 "CONFIG+=serveronly headless" TARGET=jamulus-headless
+	qmake6 "CONFIG+=serveronly headless" TARGET=jamulus-headless
 	make clean
 	make
-  qmake6 "CONFIG+=noupcasename"
+	qmake6 "CONFIG+=noupcasename"
 	make clean
 	make
 }
